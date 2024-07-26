@@ -1,6 +1,7 @@
 ---
 title: Spring Framework Basics
 ---
+
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -143,8 +144,6 @@ public abstract class CommandManager {
     protected abstract Command createCommand();
 }
 ```
-
-&nbsp;
 
 #### **4. Template Method Pattern**
 
