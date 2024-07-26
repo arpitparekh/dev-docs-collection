@@ -583,4 +583,266 @@ public class ImageDatabaseExample {
 }
 ```
 
+&nbsp;
+
+### Transaction management
+
+Transaction management in JDBC is an important concept for ensuring data integrity when performing multiple database operations that should be treated as a single unit of work. Here's an overview of transaction management in JDBC:
+
+1. **Basic Concepts:**
+
+   - A transaction is a sequence of operations that are treated as a single unit of work.
+
+   - ACID properties: Atomicity, Consistency, Isolation, Durability.
+
+2. **Key Methods:**
+
+   - `setAutoCommit(boolean)`: Controls whether each SQL statement is committed automatically.
+
+   - `commit()`: Commits the transaction.
+
+   - `rollback()`: Rolls back the transaction.
+
+   - `setSavepoint()`: Creates a savepoint within the transaction.
+
+3. **Steps for Transaction Management:**
+
+- Disable auto-commit mode&nbsp;
+- Perform database operations&nbsp;
+- If all operations are successful, commit the transaction&nbsp;
+- If an error occurs, rollback the transaction&nbsp;
+- Finally, re-enable auto-commit mode
+
+Here's a code example demonstrating transaction management:
+
+```java
+import java.sql.*;
+
+public class TransactionManagementExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/your_database";
+        String user = "your_username";
+        String password = "your_password";
+
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+            
+            // Disable auto-commit
+            conn.setAutoCommit(false);
+
+            try (Statement stmt = conn.createStatement()) {
+                // Perform multiple operations
+                stmt.executeUpdate("UPDATE accounts SET balance = balance - 100 WHERE account_id = 1");
+                stmt.executeUpdate("UPDATE accounts SET balance = balance + 100 WHERE account_id = 2");
+
+                // If we reach here without exception, commit the changes
+                conn.commit();
+                System.out.println("Transaction committed successfully.");
+            } catch (SQLException e) {
+                // If there's an exception, roll back the transaction
+                if (conn != null) {
+                    conn.rollback();
+                }
+                System.out.println("Transaction rolled back due to an error.");
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Always re-enable auto-commit and close the connection
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+**Key points about this example:**
+
+1. We disable auto-commit mode with `conn.setAutoCommit(false)`.
+
+2. We perform multiple SQL operations.
+
+3. If all operations succeed, we commit the transaction with `conn.commit()`.
+
+4. If an exception occurs, we catch it and rollback the transaction with `conn.rollback()`.
+
+5. In the `finally` block, we ensure that auto-commit is re-enabled and the connection is closed.
+
+**Advanced features:**
+
+1. **Savepoints**: Allow you to create points within a transaction that you can roll back to.
+
+```java
+Savepoint savepoint = conn.setSavepoint("SavepointName");
+// ... perform some operations ...
+conn.rollback(savepoint);
+```
+
+&nbsp;&nbsp;2. **Transaction Isolation Levels**: Control the degree of isolation between transactions.
+
+```java
+conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+```
+
+Transaction management is crucial for maintaining data integrity, especially when dealing with related operations that must succeed or fail as a unit. It's particularly important in scenarios like financial transactions, inventory management, or any situation where data consistency across multiple operations is critical.
+
+&nbsp;
+
+### Batch processing
+
+Batch processing in JDBC is a feature that allows you to execute multiple SQL statements or queries as a single unit, which can significantly improve performance when dealing with a large number of database operations.
+
+**Purpose of Batch Processing:**
+
+- Reduce network calls between the application and the database.
+
+- Improve performance for bulk operations.
+
+- Execute multiple SQL statements efficiently.
+
+**Types of Batch Processing:**
+
+`a. Statement Batch Processing `
+
+`b. PreparedStatement Batch Processing`
+
+**Key Methods:**
+
+- addBatch(): Adds a statement to the batch.
+
+- executeBatch(): Executes all statements in the batch.
+
+- clearBatch(): Removes all statements from the batch.
+
+&nbsp;
+
+**Statement Batch Processing**
+
+Used when you have multiple, different SQL statements to execute.
+
+Example:
+
+```java
+Statement stmt = conn.createStatement();
+stmt.addBatch("INSERT INTO users (name, email) VALUES ('John', 'john@example.com')");
+stmt.addBatch("UPDATE products SET price = price * 1.1 WHERE category = 'electronics'");
+stmt.addBatch("DELETE FROM orders WHERE status = 'cancelled'");
+
+int[] updateCounts = stmt.executeBatch();
+```
+
+&nbsp;
+
+**PreparedStatement Batch Processing**
+
+Used when you have the same SQL statement with different parameter values. - More efficient for large numbers of similar operations.
+
+Example:
+
+```java
+String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+PreparedStatement pstmt = conn.prepareStatement(sql);
+
+pstmt.setString(1, "John");
+pstmt.setString(2, "john@example.com");
+pstmt.addBatch();
+
+pstmt.setString(1, "Jane");
+pstmt.setString(2, "jane@example.com");
+pstmt.addBatch();
+
+int[] updateCounts = pstmt.executeBatch();
+```
+
+**Handling Results**
+
+- executeBatch() returns an array of int, where each element represents the update count for the corresponding statement in the batch.
+
+- A value of Statement.SUCCESS_NO_INFO (-2) indicates success without an update count.
+
+- A value of Statement.EXECUTE_FAILED (-3) indicates that the statement failed.
+
+**Exception Handling**
+
+- BatchUpdateException: Thrown when one or more statements in the batch fail.
+
+- You can still retrieve the update counts for successful statements.
+
+**Performance Considerations**
+
+- Set an appropriate batch size (e.g., 1000 operations per batch).
+
+- Consider using rewriteBatchedStatements=true in MySQL JDBC URL for better performance.
+
+Complete Example:
+
+```java
+import java.sql.*;
+
+public class BatchProcessingExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/your_database?rewriteBatchedStatements=true";
+        String user = "your_username";
+        String password = "your_password";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            conn.setAutoCommit(false);  // Disable auto-commit
+
+            String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                for (int i = 0; i < 10000; i++) {
+                    pstmt.setString(1, "User" + i);
+                    pstmt.setString(2, "user" + i + "@example.com");
+                    pstmt.addBatch();
+
+                    if (i % 1000 == 0) {  // Execute every 1000 rows
+                        pstmt.executeBatch();
+                        pstmt.clearBatch();
+                    }
+                }
+                
+                // Execute any remaining statements
+                pstmt.executeBatch();
+            }
+
+            conn.commit();  // Commit the transaction
+            System.out.println("Batch processing completed successfully.");
+
+        } catch (BatchUpdateException e) {
+            System.out.println("Batch update failed.");
+            int[] updateCounts = e.getUpdateCounts();
+            for (int i = 0; i < updateCounts.length; i++) {
+                System.out.println("Statement " + i + ": " + 
+                    (updateCounts[i] == Statement.EXECUTE_FAILED ? "failed" : "succeeded"));
+            }
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Best Practices**
+
+- Use batch processing for bulk inserts, updates, or deletes.
+
+- Choose an appropriate batch size based on your specific use case and database.
+
+- Always use transactions with batch processing to ensure data integrity.
+
+- Clear the batch after execution to free up memory.
+
+- Consider using generated keys if you need them after batch inserts.
+
+Batch processing is particularly useful in scenarios like data imports, bulk updates, or any situation where you need to perform a large number of similar database operations efficiently.
+
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
