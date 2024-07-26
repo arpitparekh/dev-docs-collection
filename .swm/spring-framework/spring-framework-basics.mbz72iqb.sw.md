@@ -1,6 +1,7 @@
 ---
 title: Spring Framework Basics
 ---
+
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -164,7 +165,7 @@ Among these, Dependency Injection is by far the most commonly used and recommend
 
 &nbsp;
 
-#### **DAO (Data Access Object)  \[Currenlty Replaced By JPA\]**
+#### **DAO (Data Access Object) \[Currenlty Replaced By JPA\]**
 
 #### **Spring JDBC API**
 
@@ -181,20 +182,20 @@ Key features:
 ```java
 @Repository
 public class UserDaoImpl implements UserDao {
-    
+
     private JdbcTemplate jdbcTemplate;
-    
+
     @Autowired
     public UserDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
+
     @Override
     public User findById(long id) {
         String sql = "SELECT * FROM users WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
     }
-    
+
     @Override
     public void save(User user) {
         String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
@@ -415,7 +416,7 @@ Java Data Objects (JDO) is a specification for persistent storage of Java object
 
 &nbsp;
 
-#### **OJB (ObJectRelationalB    ridge)**
+#### **OJB (ObJectRelationalB ridge)**
 
 ObJectRelationalBridge (OJB) is an open-source Object-Relational Mapping (ORM) framework for Java. It facilitates the mapping of Java objects to relational database tables, enabling seamless database operations with Java objects. OJB provides a flexible and powerful mechanism to handle the persistence layer of applications, similar to other ORM tools like Hibernate and JDO.
 
