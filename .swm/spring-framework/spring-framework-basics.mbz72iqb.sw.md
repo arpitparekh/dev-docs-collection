@@ -1,7 +1,6 @@
 ---
 title: Spring Framework Basics
 ---
-
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -47,7 +46,7 @@ The Spring IoC container is responsible for instantiating, configuring, and asse
 
 &nbsp;
 
-In Spring Framework, the primary **type of Inversion of Control (IoC)** used is Dependency Injection (DI). However, Spring also supports some other IoC patterns to a lesser extent. Let's break down the types of IoC used in Spring:
+In Spring Framework, the primary **type of Inversion of Control (IoC)** used is Dependency Injection (DI). However, Spring also supports some other IoC patterns to a lesser extent. Let's break down the types of IoC used in Spring: hello
 
 &nbsp;
 
