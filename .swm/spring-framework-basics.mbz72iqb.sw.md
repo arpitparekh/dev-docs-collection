@@ -46,7 +46,7 @@ The Spring IoC container is responsible for instantiating, configuring, and asse
 
 &nbsp;
 
-In Spring Framework, the primary **type of Inversion of Control (IoC)** used is Dependency Injection (DI). However, Spring also supports some other IoC patterns to a lesser extent. Let's break down the types of IoC used in Spring: hello
+In Spring Framework, the primary **type of Inversion of Control (IoC)** used is Dependency Injection (DI). However, Spring also supports some other IoC patterns to a lesser extent. Let's break down the types of IoC used in Spring:
 
 &nbsp;
 
