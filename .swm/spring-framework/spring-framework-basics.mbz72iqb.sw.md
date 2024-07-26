@@ -1,6 +1,7 @@
 ---
 title: Spring Framework Basics
 ---
+
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -164,7 +165,7 @@ Among these, Dependency Injection is by far the most commonly used and recommend
 
 &nbsp;
 
-#### **DAO (Data Access Object)  \[Currenlty Replaced By JPA\]**
+#### **DAO (Data Access Object) \[Currenlty Replaced By JPA\]**
 
 #### **Spring JDBC API**
 
@@ -181,20 +182,20 @@ Key features:
 ```java
 @Repository
 public class UserDaoImpl implements UserDao {
-    
+
     private JdbcTemplate jdbcTemplate;
-    
+
     @Autowired
     public UserDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
+
     @Override
     public User findById(long id) {
         String sql = "SELECT * FROM users WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
     }
-    
+
     @Override
     public void save(User user) {
         String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
@@ -415,7 +416,7 @@ Java Data Objects (JDO) is a specification for persistent storage of Java object
 
 &nbsp;
 
-#### **OJB (ObJectRelationalB    ridge)**
+#### **OJB (ObJectRelationalB ridge)**
 
 ObJectRelationalBridge (OJB) is an open-source Object-Relational Mapping (ORM) framework for Java. It facilitates the mapping of Java objects to relational database tables, enabling seamless database operations with Java objects. OJB provides a flexible and powerful mechanism to handle the persistence layer of applications, similar to other ORM tools like Hibernate and JDO.
 
@@ -471,19 +472,29 @@ OJB and iBatis (original version) are older technologies, with MyBatis being the
 
 - AspectJ integration: Provides more powerful AOP capabilities, allowing for compile-time weaving.
 
+&nbsp;
+
 ### **JEE (Java Enterprise Edition)**
 
-- JMX (Java Management Extensions): For managing and monitoring applications.
+Java Enterprise Edition (JEE), formerly known as Java 2 Platform, Enterprise Edition (J2EE), is a platform that provides an API and runtime environment for developing and running large-scale, multi-tiered, reliable, and secure network applications. It is built on top of the Java Standard Edition (SE) platform and adds specifications for distributed computing and web services. JEE includes several APIs and tools for creating complex, component-based applications, including:
 
-- JMS (Java Message Service): API for sending messages between clients.
+- `Servlets: For handling HTTP requests and generating dynamic content.`
 
-- JCA (Java Connector Architecture): For connecting Java applications to enterprise information systems.
+- `JavaServer Pages (JSP): For embedding Java code within HTML pages.`
 
-- Remoting: Supports various remoting technologies for distributed systems.
+- `Enterprise JavaBeans (EJBs): For encapsulating business logic.`
 
-- EJBs (Enterprise JavaBeans): Component architecture for building modular enterprise applications.
+- `Java Persistence API (JPA): For accessing databases in a standardized way.`
 
-- Email: Simplifies sending emails from Java applications.
+- `Java Transaction API (JTA): For managing transactions across multiple resources.`
+
+- `Java Messaging Service (JMS): For asynchronous communication between components.`
+
+- `JavaMail: For integrating email capabilities into applications.`
+
+&nbsp;
+
+&nbsp;
 
 ### **Web**
 
