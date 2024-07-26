@@ -1,5 +1,5 @@
 ---
-title: Spring Framework
+title: Spring Framework Basics
 ---
 
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
@@ -7,6 +7,8 @@ title: Spring Framework
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
 
 The spring framework is a **layered architecture** which consists of several modules. all modules are built on the top of its core container. these modules provide everything that a developer may need for use in the enterprise application development. he is always free to choose what features he needs and eliminate the modules which are of no use. it's **modular architecture** enables integration with other frameworks without much hassle.
+
+&nbsp;
 
 | Core<br><br>The IoC container | **AOP**<br><br>Spring AOP<br>AspectJ integration | DAO<br><br>Spring JDBC<br>Transaction management | ORM<br><br>Hibernate<br>JPA<br>TopLink<br>JDO<br>OJB<br>iBatis | JEE<br><br>JMX<br>JMS<br>JCA<br>Remoting<br>EJBs<br>Email | Web<br><br>Spring Web MVC<br>Framework Integration<br>Struts<br>WebWork<br>Tapestry<br>JSF<br>Rich View Support<br>JSPs<br>Velocity<br>FreeMarker<br>PDF<br>Excel<br>Jasper Reports<br>Spring Portlet MVC |
 | :---------------------------- | :----------------------------------------------- | :----------------------------------------------- | :------------------------------------------------------------- | :-------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
