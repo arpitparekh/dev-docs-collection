@@ -1,7 +1,6 @@
 ---
 title: Spring Framework Basics
 ---
-
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -23,9 +22,9 @@ The spring framework is a **layered architecture** which consists of several mod
 
 #### **IoC container**
 
-`Instead of the application controlling the flow of the program and making calls to reusable libraries, the framework controls the flow and calls into the custom code.`
+Instead of the application controlling the flow of the program and making calls to reusable libraries, the framework controls the flow and calls into the custom code.
 
-`The Spring IoC container is responsible for instantiating, configuring, and assembling objects known as beans. It manages the lifecycle of these beans and injects dependencies between them.`
+The Spring IoC container is responsible for instantiating, configuring, and assembling objects known as beans. It manages the lifecycle of these beans and injects dependencies between them.
 
 `Decoupling: Reduces dependencies between components.`
 
@@ -165,9 +164,9 @@ Among these, Dependency Injection is by far the most commonly used and recommend
 
 &nbsp;
 
-### **DAO (Data Access Object):**
+#### **DAO (Data Access Object)  \[Currenlty Replaced By JPA\]**
 
-#### **Spring JDBC**
+#### **Spring JDBC API**
 
 simplifies database operations by reducing boilerplate code. It provides several classes that make working with JDBC easier, primarily through the JdbcTemplate class.
 
@@ -179,29 +178,300 @@ Key features:
 
 - `Provides helpful utilities for parameter binding and result set extraction`
 
-- `Transaction management: Provides a consistent programming model for handling database transactions across different transaction APIs.`
+```java
+@Repository
+public class UserDaoImpl implements UserDao {
+    
+    private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    public UserDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+    
+    @Override
+    public User findById(long id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
+    }
+    
+    @Override
+    public void save(User user) {
+        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+        jdbcTemplate.update(sql, user.getName(), user.getEmail());
+    }
+}
 
-### **ORM (Object-Relational Mapping):**
+class UserRowMapper implements RowMapper<User> {
+    @Override
+    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        User user = new User();
+        user.setId(rs.getLong("id"));
+        user.setName(rs.getString("name"));
+        user.setEmail(rs.getString("email"));
+        return user;
+    }
+}
+```
 
-- Hibernate: Popular ORM tool for mapping Java objects to database tables.
+&nbsp;
 
-- JPA (Java Persistence API): Standard Java specification for ORM.
+#### **Transaction management**
 
-- TopLink: Oracle's ORM and persistence framework.
+Spring provides a consistent programming model for handling transactions across different APIs (JDBC, JPA, Hibernate, etc.).
 
-- JDO (Java Data Objects): Another Java specification for persistence.
+Key features:
 
-- OJB (ObJectRelationalBridge): Apache project for object-relational mapping.
+- `Declarative transaction management (using annotations)`
 
-- iBatis (now MyBatis): SQL mapper framework.
+- `Programmatic transaction management`
 
-**AOP (Aspect-Oriented Programming):**
+- `Supports both local and global transactions`
+
+```java
+@Service
+@Transactional
+public class UserServiceImpl implements UserService {
+
+    private final UserDao userDao;
+
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    @Override
+    public void registerUser(User user) {
+        userDao.save(user);
+        // If an exception occurs here, the transaction will be rolled back
+        sendWelcomeEmail(user);
+    }
+
+    private void sendWelcomeEmail(User user) {
+        // Logic to send welcome email
+        // If this throws an exception, the userDao.save() will be rolled back
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserById(long id) {
+        return userDao.findById(id);
+    }
+}
+```
+
+Configuration (using Java-based configuration):
+
+```java
+@Configuration
+@EnableTransactionManagement
+public class DatabaseConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/mydb");
+        dataSource.setUsername("user");
+        dataSource.setPassword("password");
+        return dataSource;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+}
+```
+
+&nbsp;
+
+### **You can indeed replace Spring DAO with JPA**(Java Persistence API) **in most scenarios:**
+
+#### **JPA(Java Persistence API)**
+
+JPA is a Java specification for managing relational data in Java applications. It provides a framework for mapping Java objects to database tables (Object-Relational Mapping or ORM)
+
+&nbsp;
+
+| Difference                      | DAO                                                                                                          | JPA                                                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Abstraction Level               | Provides an abstraction layer for database operations, but you still write SQL queries or use JDBC directly. | Offers a higher level of abstraction. You work with Java objects (entities) instead of direct database operations. |
+| Object-Relational Mapping (ORM) | Requires manual mapping between database tables and Java objects.                                            | Automatically handles the mapping between database tables and Java objects (entities).                             |
+| Code Reduction                  | Often requires writing boilerplate code for CRUD operations.                                                 | Provides built-in CRUD operations, significantly reducing the amount of code you need to write.                    |
+| Database Independence           | Can be database-independent, but requires more effort to achieve this.                                       | Offers better database independence out of the box. Changing databases often requires minimal code changes.        |
+| Query Language                  | Typically uses native SQL or a query builder.                                                                | Uses JPQL (Java Persistence Query Language) or Criteria API, which are object-oriented query languages.            |
+| Performance Optimization        | Allows fine-grained control over SQL queries for optimization.                                               | Provides various optimization techniques like lazy loading, caching, and batch processing.                         |
+| Transaction Management          | Requires explicit transaction management.                                                                    | Integrates seamlessly with Spring's declarative transaction management.                                            |
+| Learning Curve                  | Simpler to understand initially, especially for those familiar with SQL.                                     | Steeper learning curve but offers more powerful features once mastered.                                            |
+| Standardization                 | No standard implementation; varies across projects.                                                          | A standardized API, part of the Java EE specification.                                                             |
+| Testability                     | Can be easier to unit test as it's closer to the database.                                                   | Offers in-memory database testing and mocking capabilities.                                                        |
+
+With JPA and Spring Data JPA:
+
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    // Other fields, getters, setters...
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Additional custom query methods if needed
+}
+```
+
+&nbsp;
+
+### **ORM (Object-Relational Mapping)**
+
+&nbsp;
+
+#### **Hibernate**
+
+Hibernate simplifies database interactions by **automatically mapping Java objects to database** tables. It manages the persistence layer of the application, allowing developers to focus on writing business logic rather than boilerplate code for database operations. Hibernate integrates seamlessly with Spring Boot, providing features like declarative transaction management, simplified configuration, and support for various database types. By using Hibernate with Spring Boot, developers can build robust, scalable, and maintainable applications with ease.
+
+Features:
+
+- `Lazy loading`
+
+- `Caching mechanisms`
+
+- `HQL (Hibernate Query Language)`
+
+- Example:
+
+  ```java
+  @Entity
+  public class User {
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      private Long id;
+      private String name;
+  }
+  ```
+
+&nbsp;
+
+#### **JPA (Java Persistence API)**
+
+Java Persistence API (JPA) is a specification for accessing, persisting, and managing data between Java objects and relational databases. It defines a set of interfaces and annotations that simplify database interactions and provide a standard way to perform CRUD (Create, Read, Update, Delete) operations
+
+`A standard specification for ORM in Java`
+
+`Defines a set of interfaces that ORM tools can implement`
+
+`Allows for portability between different ORM implementations`
+
+`Key components: EntityManager, JPQL (Java Persistence Query Language)`
+
+Example:
+
+```java
+javaEntityManager em = entityManagerFactory.createEntityManager();
+User user = em.find(User.class, 1L);
+```
+
+&nbsp;
+
+#### **TopLink**
+
+TopLink is an Object-Relational Mapping (ORM) framework that facilitates the mapping of Java objects to relational databases. Developed by Oracle, TopLink provides tools and APIs for database access, simplifying data manipulation and query operations within Java applications. It supports various database operations and allows developers to define mappings between Java classes and database tables through annotations or XML configurations.
+
+`Oracle's proprietary ORM and persistence framework`
+
+`Provides object-to-relational, object-to-XML, and EIS data access`
+
+`Implements JPA specification`
+
+Features
+
+- `Caching`
+
+- `Query optimization`
+
+- `Distributed caching`
+
+&nbsp;
+
+#### DO (Java Data Objects)
+
+Java Data Objects (JDO) is a specification for persistent storage of Java objects, providing a standardized API for transparent persistence. Unlike the Java Persistence API (JPA), which is mainly focused on relational databases, JDO is more general and can work with both relational and non-relational databases.
+
+`Another Java specification for persistence`
+
+`More general than JPA, can work with non-relational databases`
+
+- `Features:`
+
+  - `Transparent persistence`
+
+  - `Database agnostic`
+
+`Less popular than JPA in recent years`
+
+&nbsp;
+
+#### **OJB (ObJectRelationalB    ridge)**
+
+ObJectRelationalBridge (OJB) is an open-source Object-Relational Mapping (ORM) framework for Java. It facilitates the mapping of Java objects to relational database tables, enabling seamless database operations with Java objects. OJB provides a flexible and powerful mechanism to handle the persistence layer of applications, similar to other ORM tools like Hibernate and JDO.
+
+`An Apache project for object-relational mapping`
+
+`Provides persistence for Java objects against relational databases`
+
+`Supports various databases and can be used with different APIs (JDO, ODMG, OTM)`
+
+`Note: This project is no longer actively maintaine`
+
+&nbsp;
+
+#### **iBatis (now MyBatis)**
+
+iBatis, now known as MyBatis, is a popular open-source persistence framework for Java. Unlike traditional Object-Relational Mapping (ORM) frameworks like Hibernate or JPA, MyBatis focuses on mapping SQL queries and results directly to Java objects. This approach offers more control over SQL execution and is particularly useful for applications that require complex or custom SQL operations.
+
+`SQL mapper framework, different approach from full ORMs`
+
+`Bridges objects and SQL statements using XML descriptors or annotations`
+
+`Gives more control over SQL, beneficial for complex queries`
+
+Example:
+
+```xml
+<select id="selectUser" resultType="User">
+  SELECT * FROM users WHERE id = #{id}
+</select>
+```
+
+In Java:
+
+```java
+User user = session.selectOne("selectUser", 1);
+```
+
+Key Differences:
+
+Hibernate and TopLink are full-featured ORM solutions, while MyBatis is more of a SQL mapper.
+
+JPA is a specification, while Hibernate is an implementation of JPA (among other things).
+
+JDO is more general-purpose and can work with non-relational datastores, unlike JPA which is primarily for relational databases.
+
+OJB and iBatis (original version) are older technologies, with MyBatis being the modern evolution of iBatis.
+
+&nbsp;
+
+### **AOP (Aspect-Oriented Programming)**
 
 - Spring AOP: Implements cross-cutting concerns like logging, security, and transactions.
 
 - AspectJ integration: Provides more powerful AOP capabilities, allowing for compile-time weaving.
 
-**JEE (Java Enterprise Edition):**
+### **JEE (Java Enterprise Edition)**
 
 - JMX (Java Management Extensions): For managing and monitoring applications.
 
@@ -215,7 +485,7 @@ Key features:
 
 - Email: Simplifies sending emails from Java applications.
 
-**Web:**
+### **Web**
 
 - Spring Web MVC: Model-View-Controller framework for building web applications.
 
@@ -244,6 +514,8 @@ Key features:
 - Jasper Reports: Integration for report generation.
 
 - Spring Portlet MVC: MVC framework specifically for portlet environments.
+
+&nbsp;
 
 &nbsp;
 
