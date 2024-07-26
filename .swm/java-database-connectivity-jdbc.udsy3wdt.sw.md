@@ -162,7 +162,6 @@ public class DeregisterDriverExample {
 
 - **getConnection(String url)**: Establishes a connection to a database using the provided URL. The DriverManager selects a suitable driver from those registered and attempts to establish a connection.
 
-
 - **getConnection(String url, String userName, String password)**: Similar to the above, but also accepts username and password for databases requiring authentication.
 
   ```java
@@ -406,6 +405,179 @@ public class CallStoredProc {
             System.out.println("Result: " + result);
         } catch (SQLException e) {
             System.err.println("Error calling stored procedure: " + e.getMessage());
+        }
+    }
+}
+```
+
+#### ResultSetMetaData
+
+`ResultSetMetaData` is an interface in the `java.sql` package of JDBC API, designed to provide metadata about a `ResultSet` object. Metadata refers to data about data, meaning it offers further information extracted from the data itself. When querying a database using a SELECT statement, the results are stored in a `ResultSet` object. Each `ResultSet` object is associated with a single `ResultSetMetaData` object, which contains metadata about the `ResultSet`, such as the schema name, table name, number of columns, column names, and data types of the columns.
+
+Example:
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.ResultSetMetaData;
+
+public class ResultSetMetaDataExample {
+    public static void main(String[] args) {
+        try {
+            // Establish a connection to the database
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/yourDatabase", "username", "password");
+
+            // Create a Statement object
+            Statement stmt = con.createStatement();
+
+            // Execute a query and store the result in a ResultSet object
+            ResultSet rs = stmt.executeQuery("SELECT * FROM yourTable");
+
+            // Retrieve the ResultSetMetaData object
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            // Print the number of columns
+            System.out.println("Number of columns: " + rsmd.getColumnCount());
+
+            // Iterate over each column and print its details
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                System.out.println("Column Name: " + rsmd.getColumnName(i));
+                System.out.println("Data Type: " + rsmd.getColumnTypeName(i));
+                System.out.println("Table Name: " + rsmd.getTableName(i));
+                System.out.println("--------------------");
+            }
+
+            // Close resources
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### DatabaseMetaData
+
+DatabaseMetaData is another interface in the JDBC API that provides comprehensive information about the entire database, rather than just a specific result set. It offers methods to retrieve metadata about the database as a whole, its structure, and capabilities.
+
+```java
+import java.sql.*;
+
+public class DatabaseMetaDataExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/your_database";
+        String user = "your_username";
+        String password = "your_password";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            DatabaseMetaData metaData = conn.getMetaData();
+
+            // Print basic database information
+            System.out.println("Database Product Name: " + metaData.getDatabaseProductName());
+            System.out.println("Database Product Version: " + metaData.getDatabaseProductVersion());
+            System.out.println("Driver Name: " + metaData.getDriverName());
+            System.out.println("Driver Version: " + metaData.getDriverVersion());
+
+            // List all tables
+            String[] types = {"TABLE"};
+            ResultSet rs = metaData.getTables(null, null, "%", types);
+            
+            System.out.println("\nTables in the database:");
+            while (rs.next()) {
+                String tableName = rs.getString("TABLE_NAME");
+                String tableType = rs.getString("TABLE_TYPE");
+                System.out.println(tableName + " (" + tableType + ")");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+Store an image in a MySQL database and then retrieve it using JDBC. This example uses a BLOB (Binary Large Object) to store the image data.
+
+First, let's create a table in MySQL to store the images:
+
+```sql
+CREATE TABLE images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    data LONGBLOB
+);
+```
+
+Now, here's the Java code to store and retrieve images:
+
+```java
+import java.sql.*;
+import java.io.*;
+import javax.swing.JFileChooser;
+
+public class ImageDatabaseExample {
+    // JDBC URL, username and password of MySQL server
+    private static final String URL = "jdbc:mysql://localhost:3306/your_database";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        try {
+            // Store image
+            storeImage();
+            
+            // Retrieve image
+            retrieveImage();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void storeImage() throws SQLException, IOException {
+        String sql = "INSERT INTO images (name, data) VALUES (?, ?)";
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.showOpenDialog(null);
+        File file = fileChooser.getSelectedFile();
+        
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, file.getName());
+            
+            FileInputStream fis = new FileInputStream(file);
+            pstmt.setBinaryStream(2, fis, file.length());
+            
+            pstmt.executeUpdate();
+            System.out.println("Image stored successfully!");
+        }
+    }
+
+    public static void retrieveImage() throws SQLException, IOException {
+        String sql = "SELECT name, data FROM images WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, 1); // Assuming we want to retrieve the image with id = 1
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    InputStream inputStream = rs.getBinaryStream("data");
+                    FileOutputStream fos = new FileOutputStream("retrieved_" + name);
+                    
+                    byte[] buffer = new byte[1024];
+                    while (inputStream.read(buffer) > 0) {
+                        fos.write(buffer);
+                    }
+                    System.out.println("Image retrieved successfully: retrieved_" + name);
+                }
+            }
         }
     }
 }
