@@ -483,6 +483,17 @@ summary = f"{name} is {age} years old and {height} feet tall."
 print(f"\nSummary: {summary}")
 ```
 
+**Complex Numbers (complex):** 
+
+Description: Represents numbers with real and imaginary parts. Use case: Mathematical calculations involving complex numbers.
+
+```python
+z = 3 + 4j
+print(f"Complex number: {z}")
+print(f"Real part: {z.real}, Imaginary part: {z.imag}")
+print(f"Magnitude: {abs(z)}")
+```
+
 &nbsp;
 
 ### Type conversion
