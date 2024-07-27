@@ -164,27 +164,27 @@ public class DeregisterDriverExample {
 
 - **getConnection(String url, String userName, String password)**: Similar to the above, but also accepts username and password for databases requiring authentication.
 
-  ```java
-  import java.sql.Connection;
-  import java.sql.DriverManager;
-  import java.sql.SQLException;
-  
-  public class ConnectDatabaseExample {
-  
-      public static void main(String[] args) {
-          try {
-              String url = "jdbc:mysql://localhost:3306/mydatabase";
-              String username = "myusername";
-              String password = "mypassword";
-              Connection connection = DriverManager.getConnection(url, username, password);
-              System.out.println("Connected successfully!");
-              connection.close(); // Always remember to close the connection
-          } catch (SQLException e) {
-              System.err.println("Failed to connect to database: " + e.getMessage());
-          }
-      }
-  }
-  ```
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectDatabaseExample {
+
+    public static void main(String[] args) {
+        try {
+            String url = "jdbc:mysql://localhost:3306/mydatabase";
+            String username = "myusername";
+            String password = "mypassword";
+            Connection connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected successfully!");
+            connection.close(); // Always remember to close the connection
+        } catch (SQLException e) {
+            System.err.println("Failed to connect to database: " + e.getMessage());
+        }
+    }
+}
+```
 
 - **getDriver(String url)**: Returns a Driver object for the URL if a suitable driver is found among those registered with the DriverManager.
 
