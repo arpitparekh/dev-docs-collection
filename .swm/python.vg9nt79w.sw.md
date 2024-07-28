@@ -469,69 +469,57 @@ classDiagram
 
 ```
 
-**Integers (int):**
+**Integers**
 
-- Whole numbers, positive or negative
-- Example: x = 5
-
-**Floating-point numbers (float):**
-
-- Numbers with decimal points
-- Example: y = 3.14
-
-**Strings (str):**
-
-- Text enclosed in single or double quotes
-- Example: name = "Alice"
-
-**Booleans (bool):**
-
-- True or False values
-- Example: is_active = True
+Integers are whole numbers, which can be positive or negative, including zero. They are used to represent discrete values without any fractional or decimal component.
 
 ```python
-# Integer (int)
-age = 30
-print(f"Age: {age}")
-print(f"Type of age: {type(age)}")
+x = 5
+y = -3
+z = 0
 
-# Floating-point number (float)
-height = 5.9
-print(f"Height: {height} feet")
-print(f"Type of height: {type(height)}")
-
-# String (str)
-name = "Alice"
-print(f"Name: {name}")
-print(f"Type of name: {type(name)}")
-
-# Boolean (bool)
-is_student = True
-print(f"Is a student? {is_student}")
-print(f"Type of is_student: {type(is_student)}")
-
-# Operations and interactions between types
-print("\nOperations and Interactions:")
-print(f"Age in 5 years: {age + 5}")
-print(f"Height in inches: {height * 12}")
-print(f"Uppercase name: {name.upper()}")
-print(f"Is age over 18? {age > 18}")
-
-# Type conversion
-age_str = str(age)
-print(f"\nAge as string: {age_str}")
-print(f"Type of age_str: {type(age_str)}")
-
-height_int = int(height)
-print(f"Height as integer: {height_int}")
-print(f"Type of height_int: {type(height_int)}")
-
-# Combining different types
-summary = f"{name} is {age} years old and {height} feet tall."
-print(f"\nSummary: {summary}")
+print(f"x: {x}, y: {y}, z: {z}")
+print(f"Type of x: {type(x)}, Type of y: {type(y)}, Type of z: {type(z)}")
 ```
 
-**Complex Numbers (complex):**
+**Floating-point numbers**
+
+Floating-point numbers are numbers that have a decimal point. They are used to represent real numbers with precision. They can also represent very large or very small numbers using scientific notation.
+
+```python
+y = 3.14
+z = -2.718
+scientific = 1.23e4  # 1.23 * 10^4
+
+print(f"y: {y}, z: {z}, scientific: {scientific}")
+print(f"Type of y: {type(y)}, Type of z: {type(z)}, Type of scientific: {type(scientific)}")
+```
+
+**Strings**
+
+Strings are sequences of characters enclosed in single quotes ('') or double quotes (""). They are used to represent text data. Strings in Python are immutable, meaning that once created, their values cannot be changed.
+
+```python
+name = "Alice"
+greeting = 'Hello, World!'
+
+print(f"name: {name}, greeting: {greeting}")
+print(f"Type of name: {type(name)}, Type of greeting: {type(greeting)}")
+```
+
+**Booleans**
+
+Booleans represent one of two values: True or False. They are used in logical operations and control flow statements. The keywords for booleans are `True` and `False`.
+
+```python
+is_active = True
+is_student = False
+
+print(f"is_active: {is_active}, is_student: {is_student}")
+print(f"Type of is_active: {type(is_active)}, Type of is_student: {type(is_student)}")
+```
+
+**Complex Numbers**
 
 Represents numbers with real and imaginary parts. Use case: Mathematical calculations involving complex numbers.
 
@@ -566,7 +554,7 @@ print(f"Tuple: {coordinates}")
 print(f"Type of coordinates: {type(coordinates)}")
 ```
 
-#### **Dictionary (dict)**
+#### **Dictionary**
 
 - **Description**: Unordered collection of key-value pairs.
 
@@ -637,116 +625,6 @@ view = memoryview(bytearray(b"hello"))
 print(f"Memoryview: {view}")
 print(f"Type of view: {type(view)}")
 ```
-
-&nbsp;
-
-### Type conversion
-
-Type conversion, also known as type casting, is the process of changing a value from one data type to another in Python.
-
-**Implicit Type Conversion (Coercion)**
-
-Python automatically converts one data type to another when needed. Example:&nbsp;
-
-```python
-x = 5    # int
-y = 2.0  # float
-result = x + y  # Python implicitly converts x to float
-print(result)  # Output: 7.0
-print(type(result))  # Output: <class 'float'>
-```
-
-**Explicit Type Conversion**
-
-The programmer manually converts from one type to another using built-in functions. Main type conversion functions:&nbsp;
-
-**int()**
-
-```python
-# Float to int
-float_num = 3.7
-int_num = int(float_num)
-print(int_num)  # Output: 3 (note: it truncates, doesn't round)
-
-# String to int
-str_num = "123"
-int_from_str = int(str_num)
-print(int_from_str)  # Output: 123
-```
-
-#### float(), str(), bool()
-
-```python
-# Type conversion example: float, string, and boolean
-
-# Starting with a float
-original_float = 3.14
-# Convert float to string
-float_to_string = str(original_float)
-print(f"\nFloat to string: {float_to_string}")
-print(f"Type of float_to_string: {type(float_to_string)}")
-
-# Convert string (float) back to float
-string_to_float = float(float_to_string)
-print(f"\nString back to float: {string_to_float}")
-print(f"Type of string_to_float: {type(string_to_float)}")
-
-# Convert float to boolean
-float_to_bool = bool(original_float)
-print(f"\nFloat to boolean: {float_to_bool}")
-print(f"Type of float_to_bool: {type(float_to_bool)}")
-
-# Convert boolean to float
-bool_to_float = float(float_to_bool)
-print(f"\nBoolean to float: {bool_to_float}")
-print(f"Type of bool_to_float: {type(bool_to_float)}")
-
-# String representations of boolean values
-true_string = "True"
-false_string = "False"
-
-# Convert string to boolean
-string_to_bool_true = bool(true_string)
-string_to_bool_false = bool(false_string)
-print(f"\nString 'True' to boolean: {string_to_bool_true}")
-print(f"String 'False' to boolean: {string_to_bool_false}")
-
-# Demonstrate boolean behavior with non-empty and empty strings
-non_empty_string = "Hello"
-empty_string = ""
-
-print(f"\nNon-empty string to boolean: {bool(non_empty_string)}")
-print(f"Empty string to boolean: {bool(empty_string)}")
-
-# Float to boolean: zero and non-zero
-zero_float = 0.0
-non_zero_float = 0.1
-
-print(f"\nZero float to boolean: {bool(zero_float)}")
-print(f"Non-zero float to boolean: {bool(non_zero_float)}")
-```
-
-#### Important Considerations:&nbsp;
-
-- Not all conversions are possible. For example, converting a non-numeric string to an int will raise a ValueError.
-
-```python
-try:
-    int("Hello")
-except ValueError as e:
-    print(f"Error: {e}")  # Output: Error: invalid literal for int() with base 10: 'Hello'
-```
-
-- When converting floats to ints, the decimal part is truncated, not rounded.
-
-```python
-print(int(3.7))  # Output: 3
-print(int(3.2))  # Output: 3
-```
-
-- Boolean conversion: Any non-zero number or non-empty string/container is True; zero, empty strings/containers, and None are False.
-
-Type conversion is crucial in Python programming, especially when working with user inputs, processing data, or interfacing with different systems. Understanding how to convert between types allows you to manipulate data effectively and avoid type-related errors in your code.
 
 &nbsp;
 
