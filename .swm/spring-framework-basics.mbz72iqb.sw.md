@@ -1,6 +1,7 @@
 ---
 title: Spring Framework Basics
 ---
+
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -559,18 +560,16 @@ JSP allows embedding Java code within HTML pages. This makes it easy to create d
 ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
+  <head>
     <title>Hello JSP</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Hello, JSP!</h1>
-    <%
-        String name = request.getParameter("name");
-        if (name != null) {
-            out.println("<h2>Welcome, " + name + "!</h2>");
-        }
-    %>
-</body>
+    <% String name = request.getParameter("name"); if (name != null) {
+    out.println("
+    <h2>Welcome, " + name + "!</h2>
+    "); } %>
+  </body>
 </html>
 ```
 
@@ -628,7 +627,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String name;
     private Double price;
 
@@ -801,38 +800,188 @@ In this example:
 
 &nbsp;
 
-**Web**
-
-- Spring Web MVC: Model-View-Controller framework for building web applications.
-
-- Framework Integration: Allows integration with other web frameworks.
-
-- Struts: Integration with Apache Struts web framework.
-
-- WebWork: Integration with WebWork framework (now part of Apache Struts).
-
-- Tapestry: Integration with Apache Tapestry web framework.
-
-- JSF (JavaServer Faces): Integration with JSF for building user interfaces.
-
-- Rich View Support: Supports various view technologies.
-
-- JSPs (JavaServer Pages): For creating dynamically generated web pages.
-
-- Velocity: Integration with Apache Velocity template engine.
-
-- FreeMarker: Another template engine for generating text output.
-
-- PDF: Support for generating PDF documents.
-
-- Excel: Support for generating Excel spreadsheets.
-
-- Jasper Reports: Integration for report generation.
-
-- Spring Portlet MVC: MVC framework specifically for portlet environments.
+### **Web**
 
 &nbsp;
 
+#### Spring Web MVC
+
+#### Purpose
+
+Spring Web MVC is a Model-View-Controller framework for building web applications. It helps separate the application logic, user interface, and data.
+
+#### How It Works
+
+- **Model**: Represents the data and the business logic.
+
+- **View**: Represents the presentation layer (UI).
+
+- **Controller**: Handles user input and updates the model.
+
+#### Example
+
+```java
+@Controller
+public class HelloController {
+    @RequestMapping("/hello")
+    public ModelAndView helloWorld() {
+        String message = "Hello, Spring MVC!";
+        return new ModelAndView("hello", "message", message);
+    }
+}
+```
+
+In this example:
+
+- `@Controller` denotes a controller class.
+
+- `@RequestMapping("/hello")` maps the `/hello` URL to the `helloWorld` method.
+
+- The `ModelAndView` object specifies the view name (`hello`) and the model data (`message`).
+
+####
+
+**_Spring Web MVC allows integration with other web frameworks to leverage their specific features._**
+
 &nbsp;
+
+#### Struts
+
+Struts is an open-source web application framework for developing Java EE web applications. It follows the Model-View-Controller (MVC) design pattern and has been widely used for building enterprise-level applications.
+
+Spring provides integration with Struts to leverage Spring’s powerful features like dependency injection, transaction management, and more, while still using Struts as the web layer framework.
+
+Example Integration:
+
+```xml
+<bean id="strutsController" class="org.springframework.web.struts.DelegatingRequestProcessor">
+    <property name="applicationContext" ref="applicationContext"/>
+</bean>
+```
+
+In this example:
+
+- The `DelegatingRequestProcessor` integrates Spring with the Struts framework.
+
+&nbsp;
+
+#### WebWork
+
+WebWork, now part of Apache Struts (Struts 2), is a web application framework for Java that follows the Model-View-Controller (MVC) design pattern. It simplifies the development of web applications by separating concerns of the application into different components: Model (data), View (presentation), and Controller (control logic).
+
+Example Integration:
+
+```xml
+<bean id="webWorkController" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+    <property name="alwaysUseFullPath" value="true"/>
+</bean>
+```
+
+In this example:
+
+- The `DefaultAnnotationHandlerMapping` integrates Spring with WebWork.
+
+&nbsp;
+
+#### Tapestry
+
+**Tapestry** is a component-based framework for creating dynamic, robust, highly scalable web applications in Java. Unlike traditional MVC frameworks, Tapestry uses a component-based approach, where web pages are composed of reusable components.
+
+Define Spring's `ContextLoaderListener` in your `web.xml` to initialize the Spring application context:
+
+```xml
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+</context-param>
+```
+
+&nbsp;
+
+#### JSF (JavaServer Faces)
+
+**JavaServer Faces (JSF)** is a Java specification for building component-based user interfaces for web applications. It provides a powerful component model and a lifecycle for managing UI components and handling user events.
+
+Integrating JSF with Spring allows you to leverage Spring's powerful features like dependency injection and transaction management within JSF managed beans.
+
+Define Spring’s `ContextLoaderListener` in your `web.xml` to initialize the Spring application context:
+
+```xml
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+</context-param>
+```
+
+&nbsp;
+
+**PDF Support**
+
+Spring supports generating PDF documents using libraries like iText or Apache PDFBox.
+
+```java
+@Controller
+public class PdfController {
+    @RequestMapping("/pdf")
+    public ModelAndView generatePdf() {
+        return new ModelAndView("pdfView", "message", "Hello, PDF!");
+    }
+}
+
+public class PdfView extends AbstractPdfView {
+    @Override
+    protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String message = (String) model.get("message");
+        document.add(new Paragraph(message));
+    }
+}
+```
+
+In this example:
+
+- `PdfController` handles requests and generates a PDF view.
+
+- `PdfView` extends `AbstractPdfView` to create the PDF document.
+
+&nbsp;
+
+#### Excel Support
+
+Spring supports generating Excel spreadsheets using libraries like Apache POI.
+
+```java
+@Controller
+public class ExcelController {
+    @RequestMapping("/excel")
+    public ModelAndView generateExcel() {
+        return new ModelAndView("excelView", "message", "Hello, Excel!");
+    }
+}
+
+public class ExcelView extends AbstractXlsView {
+    @Override
+    protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String message = (String) model.get("message");
+        Sheet sheet = workbook.createSheet("Spring");
+        Row row = sheet.createRow(0);
+        Cell cell = row.createCell(0);
+        cell.setCellValue(message);
+    }
+}
+```
+
+In this example:
+
+- `ExcelController` handles requests and generates an Excel view.
+
+- `ExcelView` extends `AbstractXlsView` to create the Excel spreadsheet.
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
