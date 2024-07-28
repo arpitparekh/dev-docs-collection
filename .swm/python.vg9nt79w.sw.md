@@ -419,7 +419,7 @@ multi-line comment
 
 &nbsp;
 
-### Basic data types
+### Data types
 
 Data types in Python refer to the different kinds of values that can be stored and manipulated in a program. Each data type defines the operations that can be performed on the values and the way they are stored in memory.
 
@@ -468,6 +468,10 @@ classDiagram
     Boolean <|-- BooleanType
 
 ```
+
+**type() function**
+
+The `type` function in Python is used to determine the type of an object. It can be used to return the type of any object (like integer, list, string, etc.). This function is particularly useful for debugging and understanding the types of variables you're working with in your program.
 
 **Integers**
 
