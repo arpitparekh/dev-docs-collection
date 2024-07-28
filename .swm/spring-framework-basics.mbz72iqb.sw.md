@@ -921,6 +921,10 @@ Define Spring’s `ContextLoaderListener` in your `web.xml` to initialize the Sp
 </context-param>
 ```
 
+In this example:
+
+- `FacesContextUtils` integrates Spring with JSF for building user interfaces.
+
 &nbsp;
 
 **PDF Support**
