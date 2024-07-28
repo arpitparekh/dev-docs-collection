@@ -421,6 +421,54 @@ multi-line comment
 
 ### Basic data types
 
+Data types in Python refer to the different kinds of values that can be stored and manipulated in a program. Each data type defines the operations that can be performed on the values and the way they are stored in memory.
+
+```mermaid
+classDiagram
+    direction TB
+    class DataType {
+    }
+
+    DataType <|-- Numeric
+    DataType <|-- Sequence
+    DataType <|-- SetType
+    DataType <|-- Mapping
+    DataType <|-- Binary
+    DataType <|-- Boolean
+
+    class Numeric {
+    }
+    Numeric <|-- Integer
+    Numeric <|-- Float
+    Numeric <|-- Complex
+
+    class Sequence {
+    }
+    Sequence <|-- String
+    Sequence <|-- List
+    Sequence <|-- Tuple
+
+    class SetType {
+    }
+    SetType <|-- Set
+    SetType <|-- FrozenSet
+
+    class Mapping {
+    }
+    Mapping <|-- Dictionary
+
+    class Binary {
+    }
+    Binary <|-- Bytes
+    Binary <|-- Bytearray
+    Binary <|-- Memoryview
+
+    class Boolean {
+    }
+    Boolean <|-- BooleanType
+
+```
+
 **Integers (int):**
 
 - Whole numbers, positive or negative
@@ -483,15 +531,111 @@ summary = f"{name} is {age} years old and {height} feet tall."
 print(f"\nSummary: {summary}")
 ```
 
-**Complex Numbers (complex):** 
+**Complex Numbers (complex):**
 
-Description: Represents numbers with real and imaginary parts. Use case: Mathematical calculations involving complex numbers.
+Represents numbers with real and imaginary parts. Use case: Mathematical calculations involving complex numbers.
 
 ```python
 z = 3 + 4j
 print(f"Complex number: {z}")
 print(f"Real part: {z.real}, Imaginary part: {z.imag}")
 print(f"Magnitude: {abs(z)}")
+```
+
+#### **List**
+
+- **Description**: Ordered collection of items which can be of different types.
+
+- **Use Case**: Storing a sequence of items.
+
+```python
+numbers = [1, 2, 3, 4, 5]
+print(f"List: {numbers}")
+print(f"Type of numbers: {type(numbers)}")
+```
+
+#### **Tuple**
+
+- **Description**: Ordered collection of items similar to lists but immutable.
+
+- **Use Case**: Storing a sequence of items that should not be changed.
+
+```python
+coordinates = (10.0, 20.0)
+print(f"Tuple: {coordinates}")
+print(f"Type of coordinates: {type(coordinates)}")
+```
+
+#### **Dictionary (dict)**
+
+- **Description**: Unordered collection of key-value pairs.
+
+- **Use Case**: Storing data that associates keys with values.
+
+```python
+person = {"name": "Alice", "age": 30}
+print(f"Dictionary: {person}")
+print(f"Type of person: {type(person)}")
+```
+
+#### **Set**
+
+- **Description**: Unordered collection of unique items.
+
+- **Use Case**: Storing a collection of unique elements.
+
+```python
+immutable_numbers = frozenset([1, 2, 3, 4, 5])
+print(f"Frozen Set: {immutable_numbers}")
+print(f"Type of immutable_numbers: {type(immutable_numbers)}")
+```
+
+#### **Frozen Set**
+
+- **Description**: Immutable version of a set.
+
+- **Use Case**: Storing a collection of unique elements that should not be changed.
+
+```python
+immutable_numbers = frozenset([1, 2, 3, 4, 5])
+print(f"Frozen Set: {immutable_numbers}")
+print(f"Type of immutable_numbers: {type(immutable_numbers)}")
+```
+
+#### **Bytes**
+
+- **Description**: Immutable sequence of bytes.
+
+- **Use Case**: Handling binary data.
+
+```python
+data = b"hello"
+print(f"Bytes: {data}")
+print(f"Type of data: {type(data)}")
+```
+
+#### **Bytearray**
+
+- **Description**: Mutable sequence of bytes.
+
+- **Use Case**: Handling binary data that can be modified.
+
+```python
+mutable_data = bytearray(b"hello")
+print(f"Bytearray: {mutable_data}")
+print(f"Type of mutable_data: {type(mutable_data)}")
+```
+
+#### **Memoryview**
+
+- **Description**: Memory view objects allow Python code to access the internal data of an object that supports the buffer protocol without copying.
+
+- **Use Case**: Handling large data buffers more efficiently.
+
+```python
+view = memoryview(bytearray(b"hello"))
+print(f"Memoryview: {view}")
+print(f"Type of view: {type(view)}")
 ```
 
 &nbsp;
