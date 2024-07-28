@@ -1,7 +1,6 @@
 ---
 title: Spring Framework Basics
 ---
-
 ![](/.swm/images/spring-2024-6-26-3-29-46-865.png)
 
 Spring is an open-source application framework for the Java platform. It provides comprehensive infrastructure support for developing **Java applications, particularly web applications**.
@@ -466,9 +465,39 @@ OJB and iBatis (original version) are older technologies, with MyBatis being the
 
 ### **AOP (Aspect-Oriented Programming)**
 
-- Spring AOP: Implements cross-cutting concerns like logging, security, and transactions.
+**Aspect-Oriented Programming (AOP)** is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. In simpler terms, AOP helps manage functionalities that cut across multiple points of an application, such as logging, security, and transaction management, without cluttering the core business logic.
 
-- AspectJ integration: Provides more powerful AOP capabilities, allowing for compile-time weaving.
+#### Spring AOP
+
+Spring AOP (Aspect-Oriented Programming) is part of the Spring Framework and allows you to implement cross-cutting concerns using aspects. Here’s a breakdown of its key features:
+
+1. **Cross-cutting concerns**: These are functionalities that span multiple points of an application, such as logging, security, or transaction management. Instead of writing these functionalities in each class or method, you can define them separately and apply them where needed using aspects.
+
+2. **Aspects**: An aspect is a module that encapsulates a cross-cutting concern. In Spring AOP, you can define aspects using regular Spring beans.
+
+3. **Join points**: These are points in the execution of a program, such as method execution or exception handling, where an aspect can be applied.
+
+4. **Pointcuts**: These are expressions that select one or more join points where an aspect should be applied. In Spring AOP, you can define pointcuts using expressions that match method signatures or annotations.
+
+5. **Advice**: This is the action taken by an aspect at a particular join point. There are different types of advice, such as `before`, `after`, `around`, `after returning`, and `after throwing`.
+
+#### AspectJ Integration
+
+AspectJ is a more powerful and mature AOP framework that goes beyond the capabilities of Spring AOP. Spring provides integration with AspectJ to leverage its advanced features. Here are the main points of AspectJ integration:
+
+1. **Compile-time weaving**: This means that the aspects are woven into the code during the compilation phase. This can result in more efficient code because the aspects are applied directly to the compiled bytecode.
+
+2. **Load-time weaving**: This allows aspects to be woven into the code at runtime, which can be useful for dynamically adding aspects without needing to recompile the application.
+
+3. **More powerful pointcut expressions**: AspectJ provides a richer syntax for defining pointcuts, allowing for more precise and flexible matching of join points.
+
+4. **Inter-type declarations**: AspectJ allows you to add methods, fields, or interfaces to existing classes, enabling more advanced modularization.
+
+#### Comparison
+
+- **Spring AOP** is simpler to use and integrates seamlessly with the Spring Framework, making it suitable for most common use cases of AOP, such as method-level interceptors.
+
+- **AspectJ** offers more advanced and powerful AOP features, suitable for complex scenarios where fine-grained control over the weaving process is required.
 
 &nbsp;
 
@@ -476,21 +505,303 @@ OJB and iBatis (original version) are older technologies, with MyBatis being the
 
 Java Enterprise Edition (JEE), formerly known as Java 2 Platform, Enterprise Edition (J2EE), is a platform that provides an API and runtime environment for developing and running large-scale, multi-tiered, reliable, and secure network applications. It is built on top of the Java Standard Edition (SE) platform and adds specifications for distributed computing and web services. JEE includes several APIs and tools for creating complex, component-based applications, including:
 
-- **Servlets**: For handling HTTP requests and generating dynamic content.
+&nbsp;
 
-- **JavaServer Pages (JSP)**: For embedding Java code within HTML pages.
+#### Servlets
 
-- **Enterprise JavaBeans (EJBs)**: For encapsulating business logic.
+Servlets are Java programs that run on a web server to handle HTTP requests and responses. They are used to generate dynamic content, interact with databases, and process user input.
 
-- **Java Persistence API (JPA)**: For accessing databases in a standardized way.
+#### How It Works
 
-- **Java Transaction API (JTA)**: For managing transactions across multiple resources.
+- **Request Handling**: When a user sends a request (e.g., by clicking a link or submitting a form), the web server forwards this request to the appropriate servlet.
 
-- **Java Messaging Service (JMS)**: For asynchronous communication between components.
+- **Processing**: The servlet processes the request, potentially interacting with databases or other services.
 
-- **JavaMail**: For integrating email capabilities into applications.
+- **Response Generation**: The servlet generates a response, often in the form of HTML, which is sent back to the user's browser.
 
-### **Web**
+#### Example
+
+```java
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println("<h1>Hello, World!</h1>");
+        out.println("</body></html>");
+    }
+}
+```
+
+In this example:
+
+- The `@WebServlet` annotation maps the servlet to the URL pattern `/hello`.
+
+- The `doGet` method handles GET requests. It sets the response type to HTML and sends a simple "Hello, World!" message to the browser.
+
+&nbsp;
+
+#### JavaServer Pages (JSP)
+
+JSP allows embedding Java code within HTML pages. This makes it easy to create dynamic web content by combining static HTML with dynamic data generated by Java code.
+
+#### How It Works
+
+- **HTML Template**: JSP pages are essentially HTML pages with embedded Java code.
+
+- **Compilation**: When a JSP page is requested, the server compiles it into a servlet.
+
+- **Execution**: The generated servlet handles the request, executes the Java code, and generates the dynamic content.
+
+#### Example
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Hello JSP</title>
+</head>
+<body>
+    <h1>Hello, JSP!</h1>
+    <%
+        String name = request.getParameter("name");
+        if (name != null) {
+            out.println("<h2>Welcome, " + name + "!</h2>");
+        }
+    %>
+</body>
+</html>
+```
+
+In this example:
+
+- The `@page` directive sets the content type and language.
+
+- Java code within `<% ... %>` is executed on the server side. It checks if a `name` parameter is present in the request and displays a welcome message.
+
+&nbsp;
+
+#### Enterprise JavaBeans (EJBs)
+
+EJBs encapsulate business logic in a modular and reusable way. They are designed for enterprise-level applications, providing services like transaction management, security, and concurrency.
+
+#### Types of EJBs
+
+- **Session Beans**: Handle business logic and can be stateless (do not maintain state) or stateful (maintain state across multiple method calls).
+
+- **Message-Driven Beans**: Handle asynchronous processing of messages, typically from a JMS queue.
+
+```java
+@Stateless
+public class OrderService {
+    @PersistenceContext
+    private EntityManager em;
+
+    public void placeOrder(Order order) {
+        em.persist(order);
+    }
+}
+```
+
+In this example:
+
+- The `@Stateless` annotation defines a stateless session bean.
+
+- The `EntityManager` is used to interact with the database, persisting the `Order` object.
+
+&nbsp;
+
+#### Java Persistence API (JPA)
+
+JPA provides a standard way to manage relational data in Java applications using an object-relational mapping (ORM) approach.
+
+#### How It Works
+
+- **Entities**: Java classes annotated with JPA annotations represent database tables.
+
+- **Entity Manager**: Manages the lifecycle of entity instances and interacts with the database.
+
+```java
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private Double price;
+
+    // Getters and setters
+}
+
+public class ProductService {
+    @PersistenceContext
+    private EntityManager em;
+
+    public void addProduct(Product product) {
+        em.persist(product);
+    }
+
+    public Product findProduct(Long id) {
+        return em.find(Product.class, id);
+    }
+}
+```
+
+In this example:
+
+- The `Product` class is an entity mapped to a database table.
+
+- The `ProductService` uses an `EntityManager` to persist and find `Product` instances.
+
+&nbsp;
+
+#### Java Transaction API (JTA)
+
+JTA manages transactions across multiple resources, ensuring that a series of operations either all succeed or all fail, maintaining data consistency.
+
+#### How It Works
+
+- **Begin Transaction**: A transaction is started.
+
+- **Commit/Rollback**: If all operations succeed, the transaction is committed; if any operation fails, the transaction is rolled back.
+
+```java
+@Stateless
+public class BankingService {
+    @Resource
+    private UserTransaction utx;
+
+    public void transferFunds(Account from, Account to, double amount) {
+        try {
+            utx.begin();
+            from.debit(amount);
+            to.credit(amount);
+            utx.commit();
+        } catch (Exception e) {
+            utx.rollback();
+            throw new RuntimeException("Transfer failed", e);
+        }
+    }
+}
+```
+
+In this example:
+
+- The `UserTransaction` is used to manage the transaction.
+
+- Funds are transferred between accounts, and the transaction is either committed or rolled back based on the success of the operations.
+
+&nbsp;
+
+#### Java Messaging Service (JMS)
+
+JMS facilitates asynchronous communication between different components of an application through messages.
+
+#### How It Works
+
+- **Producers**: Send messages to a destination (queue or topic).
+
+- **Consumers**: Receive messages from the destination.
+
+```java
+@Stateless
+public class MessageProducerService {
+    @Resource(mappedName = "java:/jms/queue/TestQueue")
+    private Queue queue;
+
+    @Inject
+    private JMSContext context;
+
+    public void sendMessage(String message) {
+        context.createProducer().send(queue, message);
+    }
+}
+
+@MessageDriven(mappedName = "java:/jms/queue/TestQueue")
+public class MessageConsumerBean implements MessageListener {
+    public void onMessage(Message message) {
+        try {
+            String text = ((TextMessage) message).getText();
+            System.out.println("Received message: " + text);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+In this example:
+
+- The `MessageProducerService` sends messages to a JMS queue.
+
+- The `MessageConsumerBean` receives messages from the queue and processes them.
+
+&nbsp;
+
+#### JavaMail
+
+JavaMail provides an API for sending and receiving email from within Java applications.
+
+#### How It Works
+
+- **Session**: Represents a mail session with properties and authentication.
+
+- **Message**: Represents the email message to be sent.
+
+```java
+public class EmailService {
+    public void sendEmail(String to, String subject, String body) {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", "smtp.example.com");
+        properties.put("mail.smtp.port", "25");
+
+        Session session = Session.getDefaultInstance(properties, null);
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("no-reply@example.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject(subject);
+            message.setText(body);
+
+            Transport.send(message);
+            System.out.println("Email sent successfully");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+In this example:
+
+- An `EmailService` class is created to send emails.
+
+- SMTP properties are set, and an email message is created and sent using the `Transport` class.
+
+&nbsp;
+
+#### Summary
+
+- **Servlets** handle HTTP requests and generate dynamic content.
+
+- **JSP** allows embedding Java code in HTML for the presentation layer.
+
+- **EJBs** encapsulate business logic and manage enterprise-level tasks.
+
+- **JPA** standardizes database access using Java objects.
+
+- **JTA** manages transactions across multiple resources for data consistency.
+
+- **JMS** facilitates asynchronous communication between components.
+
+- **JavaMail** integrates email capabilities into applications.
+
+&nbsp;
+
+**Web**
 
 - Spring Web MVC: Model-View-Controller framework for building web applications.
 
