@@ -131,6 +131,479 @@ C is a powerful and versatile programming language widely used in various domain
 
 - **Security Software**: Applications like antivirus programs and network security tools are often written in C.
 
-### 
+&nbsp;
+
+### Basic Structure of a C Program
+
+The basic structure of a C program consists of several key components that work together to create a functional program. Here’s a detailed breakdown:
+
+```c
+#include <stdio.h> // Preprocessor directive
+
+// Function declaration
+int main() { // Main function
+    // Variable declaration
+    int number;
+    
+    // Executable statements
+    printf("Enter a number: ");
+    scanf("%d", &number);
+    printf("You entered: %d\n", number);
+    
+    // Return statement
+    return 0;
+}
+```
+
+#### **Preprocessor Directives**
+
+- These lines begin with `#` and are processed before the actual compilation of the code begins.
+
+- Example: `#include <stdio.h>` tells the compiler to include the standard input-output header file, which contains functions like `printf` and `scanf`.
+
+#### **Global Decla**rations
+
+- Variables and functions declared outside of any function have a global scope and can be accessed from any part of the program.
+
+- Global declarations are not shown in the basic example above but are common in larger programs.
+
+#### **The** `main` Function
+
+- This is the entry point of every C program. Execution starts from the `main` function.
+
+- Syntax: `int main() { /* code */ }`
+
+- The `main` function returns an integer value, typically `0` to indicate successful execution.
+
+**Variable Declarations**
+
+- Variables must be declared before they are used.
+
+- Example: `int number;` declares an integer variable named `number`.
+
+**Executable Statements**
+
+- These are the instructions that the program executes.
+
+- Examples include input/output functions, arithmetic operations, and function calls.
+
+- `printf("Enter a number: ");` displays a message to the user.
+
+- `scanf("%d", &number);` reads an integer input from the user and stores it in the variable `number`.
+
+#### **Return** Statement
+
+- The `return` statement in the `main` function returns control to the operating system.
+
+- `return 0;` indicates that the program ended successfully.
+
+&nbsp;
+
+### Variable Declaration and Initialization
+
+**Declaration :** Specifying the type and name of a variable.
+
+```c
+int a;
+float b;
+char c;
+```
+
+**Initialization** : Assigning an initial value to a variable at the time of declaration.
+
+```c
+int a = 10;
+float b = 3.14;
+char c = 'A';
+```
+
+### **Data Types and Variables**
+
+Data types specify the type of data that a variable can hold. C has several basic data types, and each type determines the amount of memory allocated to a variable and the kind of operations that can be performed on it.
+
+#### Integer Types
+
+`short int` used to store smaller integer values. Typically occupies `2 bytes`.
+
+```c
+short int b = 5;
+```
+
+`int` used to store integer values (whole numbers). Typically occupies `4 bytes` of memory.
+
+```c
+int a = 10;
+```
+
+`long int` used to store larger integer values. Typically occupies `4 or 8 bytes`.
+
+```c
+long int c = 100000L;
+```
+
+`long long int` used to store very large integer values. Typically occupies `8 bytes`.
+
+```c
+long long int d = 10000000000LL;
+```
+
+#### Character Type
+
+`char` used to store single characters. Typically occupies `1 byte`.
+
+```c
+char e = 'A';
+```
+
+#### Floating-Point Types
+
+`float` used to store single-precision floating-point numbers. Typically occupies `4 bytes`.
+
+```c
+float f = 3.14f;
+```
+
+`double` used to store double-precision floating-point numbers. Typically occupies `8 bytes`.
+
+```c
+double g = 3.14159;
+```
+
+`long double` used to store extended precision floating-point numbers. Typically occupies `10, 12, or 16 bytes`.
+
+```c
+long double h = 3.141592653589793L;
+```
+
+### Other Datatypes
+
+**Arrays** is a collection of elements of the same type.
+
+```c
+int arr[5] = {1, 2, 3, 4, 5};
+```
+
+**Pointers** is variable that stores the address of another variable.
+
+```c
+int *ptr;
+int x = 10;
+ptr = &x;
+```
+
+**Structures** is collection of variables of different types.
+
+```c
+struct Person {
+    char name[50];
+    int age;
+    float salary;
+};
+```
+
+**Unions** is similar to structures but members share the same memory location.
+
+```c
+union Data {
+    int i;
+    float f;
+    char str[20];
+};
+```
+
+**Enums** is user-defined data type consisting of named integer constants.
+
+```c
+enum Week {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
+```
+
+**String**
+
+In C, there is no specific data type called `string`. Instead, strings are represented as arrays of characters terminated by a null character (`\0`). This null character marks the end of the string.
+
+```c
+char str[50];  // A string can hold up to 49 characters + null terminator
+```
+
+Strings can be initialized in several ways
+
+```c
+char str1[] = "Hello, World!";  // The size of the array is determined by the length of the string
+char str2[50] = "Hello, World!";  // Specifying the size of the array explicitly
+char str3[50] = {'H', 'e', 'l', 'l', 'o', '\0'};  // Character array with a null terminator
+```
+
+**Signed and Unsigned Datatypes**
+
+- **signed**: Can hold both positive and negative values (default for `int` and `char`).
+
+```c
+signed int si = -10;
+```
+
+- **unsigned**: Can hold only positive values.
+
+```c
+unsigned int ui = 10;
+```
+
+&nbsp;
+
+### Format Specifiers for Data Types in C
+
+- **Integer Types**: `%hd` (short int), `%d` (int), `%ld` (long int), `%lld` (long long int)
+- **Character Type**: `%c` (char)
+- **Floating-Point Types**: `%f` (float), `%lf` (double), `%Lf` (long double)
+
+```c
+#include <stdio.h>
+
+int main() {
+    // Integer Types
+    short int shortInt = 5;
+    int intValue = 10;
+    long int longInt = 100000L;
+    long long int longLongInt = 10000000000LL;
+
+    // Character Type
+    char charValue = 'A';
+
+    // Floating-Point Types
+    float floatValue = 3.14f;
+    double doubleValue = 3.14159;
+    long double longDoubleValue = 3.141592653589793L;
+
+    // Displaying all values with their format specifiers
+    printf("Short int: %hd\n", shortInt);
+    printf("Int: %d\n", intValue);
+    printf("Long int: %ld\n", longInt);
+    printf("Long long int: %lld\n", longLongInt);
+
+    printf("Char: %c\n", charValue);
+
+    printf("Float: %f\n", floatValue);
+    printf("Double: %lf\n", doubleValue);
+    printf("Long double: %Lf\n", longDoubleValue);
+
+    return 0;
+}
+```
+
+&nbsp;
+
+### Operators in C
+
+#### Arithmetic Operators
+
+- `+` : Addition
+
+- `-` : Subtraction
+
+- `*` : Multiplication
+
+- `/` : Division
+
+- `%` : Modulus (remainder after division)
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 5;
+    printf("Addition: %d\n", a + b);          // Output: 15
+    printf("Subtraction: %d\n", a - b);       // Output: 5
+    printf("Multiplication: %d\n", a * b);    // Output: 50
+    printf("Division: %d\n", a / b);          // Output: 2
+    printf("Modulus: %d\n", a % b);           // Output: 0
+    return 0;
+}
+```
+
+#### Relational Operators
+
+- `==` : Equal to
+
+- `!=` : Not equal to
+
+- `>` : Greater than
+
+- `<` : Less than
+
+- `>=` : Greater than or equal to
+
+- `<=` : Less than or equal to
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 5;
+    printf("Equal to: %d\n", a == b);         // Output: 0 (false)
+    printf("Not equal to: %d\n", a != b);     // Output: 1 (true)
+    printf("Greater than: %d\n", a > b);      // Output: 1 (true)
+    printf("Less than: %d\n", a < b);         // Output: 0 (false)
+    printf("Greater than or equal to: %d\n", a >= b); // Output: 1 (true)
+    printf("Less than or equal to: %d\n", a <= b);    // Output: 0 (false)
+    return 0;
+}
+```
+
+#### Logical Operators
+
+- `&&` : Logical AND
+
+- `||` : Logical OR
+
+- `!` : Logical NOT
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 5;
+    printf("Logical AND: %d\n", (a > b) && (a != b)); // Output: 1 (true)
+    printf("Logical OR: %d\n", (a < b) || (a == b));  // Output: 0 (false)
+    printf("Logical NOT: %d\n", !(a == b));           // Output: 1 (true)
+    return 0;
+}
+```
+
+#### Bitwise Operators
+
+- `&` : Bitwise AND
+
+- `|` : Bitwise OR
+
+- `^` : Bitwise XOR
+
+- `~` : Bitwise NOT
+
+- `<<` : Left shift
+
+- `>>` : Right shift
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 5, b = 3;  // a = 0101, b = 0011 in binary
+    printf("Bitwise AND: %d\n", a & b);      // Output: 1  (0001)
+    printf("Bitwise OR: %d\n", a | b);       // Output: 7  (0111)
+    printf("Bitwise XOR: %d\n", a ^ b);      // Output: 6  (0110)
+    printf("Bitwise NOT: %d\n", ~a);         // Output: -6 (1111...1010 in 2's complement)
+    printf("Left shift: %d\n", a << 1);      // Output: 10 (1010)
+    printf("Right shift: %d\n", a >> 1);     // Output: 2  (0010)
+    return 0;
+}
+```
+
+#### Assignment Operators
+
+- `=` : Simple assignment
+
+- `+=` : Add and assign
+
+- `-=` : Subtract and assign
+
+- `*=` : Multiply and assign
+
+- `/=` : Divide and assign
+
+- `%=` : Modulus and assign
+
+- `&=` : Bitwise AND and assign
+
+- `|=` : Bitwise OR and assign
+
+- `^=` : Bitwise XOR and assign
+
+- `<<=` : Left shift and assign
+
+- `>>=` : Right shift and assign
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10;
+    a += 5;    // a = a + 5
+    printf("Add and assign: %d\n", a); // Output: 15
+    a -= 3;    // a = a - 3
+    printf("Subtract and assign: %d\n", a); // Output: 12
+    a *= 2;    // a = a * 2
+    printf("Multiply and assign: %d\n", a); // Output: 24
+    a /= 4;    // a = a / 4
+    printf("Divide and assign: %d\n", a);   // Output: 6
+    a %= 5;    // a = a % 5
+    printf("Modulus and assign: %d\n", a);  // Output: 1
+    return 0;
+}
+```
+
+#### Unary Operators
+
+- `+` : Unary plus (usually redundant)
+
+- `-` : Unary minus (negates the value)
+
+- `++` : Increment
+
+- `--` : Decrement
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10;
+    int b = -a;   // Unary minus
+    printf("Unary minus: %d\n", b); // Output: -10
+    int c = ++a;  // Pre-increment
+    printf("Pre-increment: %d\n", c); // Output: 11
+    int d = a--;  // Post-decrement
+    printf("Post-decrement: %d\n", d); // Output: 11
+    return 0;
+}
+```
+
+#### Ternary Operator
+
+- `? :` : Conditional expression
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 5;
+    int max = (a > b) ? a : b; // If a > b, max = a; otherwise, max = b
+    printf("Max value: %d\n", max); // Output: 10
+    return 0;
+}
+```
+
+#### Special Operators
+
+- `sizeof` : Returns the size of a data type or variable in bytes
+
+- `&` : Address of operator
+
+- `*` : Pointer dereference
+
+- `,` : Comma operator
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 10;
+    printf("Size of int: %zu\n", sizeof(a)); // Output: 4 (on most systems)
+    int *ptr = &a;  // Address of operator
+    printf("Address of a: %p\n", ptr); // Output: Memory address of a
+    int value = *ptr; // Pointer dereference
+    printf("Value at address: %d\n", value); // Output: 10
+    int x = (a, a + 5); // Comma operator
+    printf("Comma operator result: %d\n", x); // Output: 15
+    return 0;
+}
+```
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
