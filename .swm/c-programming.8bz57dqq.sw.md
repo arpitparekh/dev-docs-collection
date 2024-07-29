@@ -5,6 +5,8 @@ C is a powerful general-purpose programming language that is widely used for sys
 
 C programming has a wide range of applications due to its efficiency, performance, and control over system resources. Here are some key areas where C programming is extensively used:
 
+![](/.swm/images/c-2024-6-29-2-49-6-779.jpg)
+
 &nbsp;
 
 ### History of C Programming
@@ -605,5 +607,256 @@ int main() {
     return 0;
 }
 ```
+
+&nbsp;
+
+### Conditional statements
+
+Conditional statements in C allow you to control the flow of your program based on certain conditions. Here's a list of conditional statements in C with brief descriptions:
+
+`if` **statement**: Executes a block of code if a specified condition is true.
+
+`if-else` **statement**: Executes one block of code if a condition is true, and another if it's false.
+
+`else if` **statement**: Allows checking multiple conditions in sequence.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int number;
+    
+    printf("Enter a number: ");
+    scanf("%d", &number);
+    
+    if (number > 0) {
+        printf("The number is positive.\n");
+    } else if (number < 0) {
+        printf("The number is negative.\n");
+    } else {
+        printf("The number is zero.\n");
+    }
+    
+    return 0;
+}
+```
+
+`Nested if` **statements**: Conditional statements inside other conditional statements.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int age;
+    char hasLicense;
+    
+    printf("Enter your age: ");
+    scanf("%d", &age);
+    
+    printf("Do you have a driver's license? (Y/N): ");
+    scanf(" %c", &hasLicense);
+    
+    if (age >= 18) {
+        if (hasLicense == 'Y' || hasLicense == 'y') {
+            printf("You are eligible to drive.\n");
+        } else {
+            printf("You are old enough, but need a license to drive.\n");
+        }
+    } else {
+        if (age >= 16) {
+            printf("You can apply for a learner's permit.\n");
+        } else {
+            printf("You are too young to drive.\n");
+        }
+    }
+    
+    return 0;
+}
+```
+
+`switch` **statement**: Selects one of many code blocks to be executed based on a variable's value.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int day;
+    
+    printf("Enter a number (1-7): ");
+    scanf("%d", &day);
+    
+    switch (day) {
+        case 1:
+            printf("Monday\n");
+            break;
+        case 2:
+            printf("Tuesday\n");
+            break;
+        case 3:
+            printf("Wednesday\n");
+            break;
+        case 4:
+            printf("Thursday\n");
+            break;
+        case 5:
+            printf("Friday\n");
+            break;
+        case 6:
+            printf("Saturday\n");
+            break;
+        case 7:
+            printf("Sunday\n");
+            break;
+        default:
+            printf("Invalid day number\n");
+    }
+    
+    return 0;
+}
+```
+
+`Ternary operator`  is a shorthand way to write simple if-else statements.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int age;
+    
+    printf("Enter your age: ");
+    scanf("%d", &age);
+    
+    char* status = (age >= 18) ? "adult" : "minor";
+    
+    printf("You are an %s.\n", status);
+    
+    return 0;
+}
+```
+
+`goto` **statement**: Jumps to a labeled statement within the function (use with caution).
+
+```c
+#include <stdio.h>
+
+int main() {
+    int i = 0;
+    
+start:
+    printf("%d ", i);
+    i++;
+    
+    if (i < 5)
+        goto start;
+    
+    printf("\nLoop finished.\n");
+    return 0;
+}
+```
+
+&nbsp;
+
+### **Loop statement**&nbsp;
+
+in C allow you to execute a block of code repeatedly
+
+`for` loop: The for loop is used when you know in advance how many times you want to execute a block of code.
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d ", i);
+    }
+    printf("\n");
+    return 0;
+}
+```
+
+`while` loop: The while loop executes a block of code as long as a condition is true.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int i = 1;
+    while (i <= 5) {
+        printf("%d ", i);
+        i++;
+    }
+    printf("\n");
+    return 0;
+}
+```
+
+`do-while` loop: The do-while loop is similar to the while loop, but it guarantees that the code block is executed at least once before the condition is checked.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int i = 1;
+    do {
+        printf("%d ", i);
+        i++;
+    } while (i <= 5);
+    printf("\n");
+    return 0;
+}
+```
+
+Each type of loop has its use cases:
+
+- Use `for` when you know the number of iterations in advance.
+
+- Use `while` when you want to continue as long as a condition is true.
+
+- Use `do-while` when you want to ensure the loop body executes at least once.
+
+&nbsp;
+
+### Arrays
+
+Arrays in C are a fundamental data structure that allow you to store multiple elements of the same data type in contiguous memory locations. Let's dive into the details with explanations and examples.
+
+1. Declaration and Initialization:
+
+```c
+// Declaration
+int numbers[5];  // Array of 5 integers
+
+// Declaration and initialization
+int numbers[] = {1, 2, 3, 4, 5};  // Size is inferred
+int numbers[5] = {1, 2, 3, 4, 5};  // Explicitly sized
+int numbers[5] = {1, 2};  // Remaining elements initialized to 0
+```
+
+2. Accessing Elements: Array elements are accessed using their `index`, starting from 0:
+
+```c
+int numbers[5] = {10, 20, 30, 40, 50};
+printf("%d\n", numbers[2]);  // Prints 30
+numbers[1] = 25;  // Modifies the second element
+```
+
+3. Multi-dimensional Arrays:
+
+```c
+int matrix[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+printf("%d\n", matrix[1][2]);  // Prints 6
+```
+
+4. Array Size: The size of an array can be determined using the sizeof operator:
+
+```c
+int numbers[5] = {1, 2, 3, 4, 5};
+int size = sizeof(numbers) / sizeof(numbers[0]);
+printf("Array size: %d\n", size);  // Prints 5
+```
+
+5. Arrays and Pointers: Arrays are closely related to pointers in C:
+
+&nbsp;
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
