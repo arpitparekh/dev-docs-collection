@@ -852,11 +852,150 @@ printf("%d\n", matrix[1][2]);  // Prints 6
 ```c
 int numbers[5] = {1, 2, 3, 4, 5};
 int size = sizeof(numbers) / sizeof(numbers[0]);
-printf("Array size: %d\n", size);  // Prints 5
+printf("Array size: %d\n", size);  // Prints 
 ```
 
-5. Arrays and Pointers: Arrays are closely related to pointers in C:
+&nbsp;
+
+### String
+
+Strings in C are essentially arrays of characters
 
 &nbsp;
+
+#### Declaration and Initialization
+
+- Strings are declared and initialized as arrays of characters with an extra null character `'\0'` at the end to signify the end of the string.
+
+```c
+char str1[] = "Hello, World!"; // Automatically adds '\0' at the end
+char str2[13] = "Hello, World"; // Size must accommodate the '\0'
+char str3[50]; // Uninitialized character array
+```
+
+- **Character Array vs. String Literal**: String literals are read-only, whereas character arrays can be modified.
+
+```c
+char *str4 = "Hello"; // String literal (read-only)
+char str5[] = "Hello"; // Character array (modifiable)
+```
+
+#### Input and Output
+
+- **String Input**: Use functions like `scanf`, `fgets`, or `gets` to read strings. Note that `gets` is unsafe and should be avoided.
+
+```c
+char str[50];
+printf("Enter a string: ");
+fgets(str, sizeof(str), stdin); // Safer way to read strings
+// scanf("%s", str); // Unsafe for strings with spaces
+```
+
+- **String Output**: Use `printf` or `puts` to display strings.
+
+```c
+printf("You entered: %s\n", str);
+puts(str); // Automatically adds a newline
+```
+
+&nbsp;
+
+#### String Functions from `<string.h>`
+
+`strlen`: Returns the length of the string (excluding the null character).
+
+```c
+char str[] = "Hello";
+int length = strlen(str);
+printf("Length: %d\n", length); // Prints 5
+```
+
+`strcpy`: Copies one string to another. Be cautious of buffer overflows.
+
+```c
+char src[] = "Copy me";
+char dest[20];
+strcpy(dest, src);
+printf("Destination: %s\n", dest);
+```
+
+`strncpy`: Safer version of `strcpy` that limits the number of characters copied.
+
+```c
+strncpy(dest, src, sizeof(dest) - 1);
+dest[sizeof(dest) - 1] = '\0'; // Ensure null termination
+```
+
+`strcat`: Concatenates (appends) one string to another.
+
+```c
+char first[20] = "Hello, ";
+char second[] = "World!";
+strcat(first, second);
+printf("Concatenated: %s\n", first);
+```
+
+`strncat`: Safer version of `strcat` that limits the number of characters appended.
+
+```c
+strncat(first, second, sizeof(first) - strlen(first) - 1);
+```
+
+`strcmp`: Compares two strings lexicographically.
+
+```c
+int result = strcmp("apple", "banana");
+if (result < 0) {
+    printf("apple is less than banana\n");
+} else if (result > 0) {
+    printf("apple is greater than banana\n");
+} else {
+    printf("apple and banana are equal\n");
+}
+```
+
+`strncmp`: Compares up to a specified number of characters.
+
+```c
+int result = strncmp("apple", "application", 5); // Compares first 5 characters
+```
+
+`strchr`: Finds the first occurrence of a character in a string.
+
+```c
+char *position = strchr(str, 'l');
+if (position) {
+    printf("Found 'l' at position: %ld\n", position - str);
+}
+```
+
+`strstr`: Finds the first occurrence of a substring in a string.
+
+```c
+char *substr = strstr(str, "World");
+if (substr) {
+    printf("Substring found: %s\n", substr);
+}
+```
+
+&nbsp;
+
+**Pointer Arithmetic**: You can manipulate strings using pointers, which can be useful for complex string operations.
+
+```c
+char *p = str;
+while (*p != '\0') {
+    printf("%c", *p);
+    p++;
+}
+```
+
+#### Tips for Working with Strings
+
+- **Avoid Buffer Overflows**: Always ensure that the destination buffer is large enough for string operations.
+
+- **Use Safe Functions**: Prefer `strncpy`, `strncat`, and `fgets` over their unsafe counterparts.
+
+- **Check for Null**: Always check the return value of functions like `malloc`, `strchr`, and `strstr` for `NULL` to avoid segmentation faults.
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
