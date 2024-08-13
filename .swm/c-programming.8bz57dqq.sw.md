@@ -393,6 +393,17 @@ int main() {
 
 &nbsp;
 
+### Enumerations
+
+`enum` is used to create named constants that represent integer values.
+
+```c
+enum Color { RED, GREEN, BLUE };
+enum Color favoriteColor = RED;
+```
+
+&nbsp;
+
 ### Operators in C
 
 #### Arithmetic Operators
@@ -734,26 +745,6 @@ int main() {
 }
 ```
 
-`goto` **statement**: Jumps to a labeled statement within the function (use with caution).
-
-```c
-#include <stdio.h>
-
-int main() {
-    int i = 0;
-    
-start:
-    printf("%d ", i);
-    i++;
-    
-    if (i < 5)
-        goto start;
-    
-    printf("\nLoop finished.\n");
-    return 0;
-}
-```
-
 &nbsp;
 
 ### **Loop statement**&nbsp;
@@ -813,6 +804,81 @@ Each type of loop has its use cases:
 - Use `while` when you want to continue as long as a condition is true.
 
 - Use `do-while` when you want to ensure the loop body executes at least once.
+
+&nbsp;
+
+### Jump Statements
+
+Jump statements in C are used to alter the normal flow of control in a program. They are particularly useful within loops and conditional statements to control the execution sequence based on certain conditions.
+
+1\. **break Statement**
+
+The `break` statement is used to terminate the nearest enclosing loop or `switch` statement. When a `break` statement is encountered inside a loop, the loop is exited immediately, and the control of the program moves to the statement following the loop.
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 0; i < 10; i++) {
+        if (i == 5) {
+            break; // Exit the loop when i is 5
+        }
+        printf("%d ", i);
+    }
+    // Output: 0 1 2 3 4
+    return 0;
+}
+```
+
+2\. **continue Statement**
+
+The `continue` statement skips the remaining code inside the current iteration of the loop and moves to the next iteration. In `for` loops, it transfers control to the update expression, while in `while` and `do-while` loops, it transfers control to the condition check.
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 == 0) {
+            continue; // Skip the rest of the loop body for even numbers
+        }
+        printf("%d ", i);
+    }
+    // Output: 1 3 5 7 9
+    return 0;
+}
+```
+
+3\. **goto Statement**
+
+The `goto` statement allows you to transfer control to a labeled statement within a function. It's generally discouraged because it can make the program harder to understand and maintain, leading to "spaghetti code." However, it can be useful for breaking out of deeply nested loops.
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i == j) {
+                goto end; // Jump to the label 'end' if i equals j
+            }
+            printf("i = %d, j = %d\n", i, j);
+        }
+    }
+    
+end:
+    printf("Exited the loops.\n");
+    // Output: 
+    // i = 0, j = 1
+    // i = 0, j = 2
+    // i = 1, j = 0
+    // i = 1, j = 2
+    // i = 2, j = 0
+    // Exited the loops.
+    
+    return 0;
+}
+```
 
 &nbsp;
 
@@ -879,6 +945,8 @@ char str3[50]; // Uninitialized character array
 char *str4 = "Hello"; // String literal (read-only)
 char str5[] = "Hello"; // Character array (modifiable)
 ```
+
+&nbsp;
 
 #### Input and Output
 
@@ -1631,9 +1699,9 @@ Preprocessor directives in C are commands that are executed by the preprocessor 
 
 &nbsp;
 
-1.1 #include
+#### 1.1 `#include`
 
-Purpose: Include the contents of a file in another file, typically used for header files.
+**Purpose**: Include the contents of a file in another file, typically used for header files.
 
 ```c
 #include <stdio.h>  // Includes a system header file
@@ -1645,76 +1713,159 @@ Purpose: Include the contents of a file in another file, typically used for head
 
 &nbsp;
 
-1.2 #define
+#### 1.2 `#define`
 
+**Purpose**: Define macros or symbolic constants.
+
+```c
+#define PI 3.14159
+#define MAX(a, b) ((a) > (b) ? (a) : (b))  // Macro for maximum of two numbers
 ```
-Purpose: Define macros or symbolic constants.
 
-Usage:
+**Undefining Macros**: Use `#undef` to remove a macro definition.
 
-c
-```
-
-#define PI 3.14159 #define MAX(a, b) ((a) > (b) ? (a) : (b))  // Macro for maximum of two numbers
-
-Undefining Macros: Use #undef to remove a macro definition.
-
-c
-
-```
+```c
 #undef PI
 ```
 
-1.3 Conditional Compilation
+&nbsp;
 
-```
-Purpose: Compile code conditionally based on certain conditions.
+#### 1.3 **Conditional Compilation**
 
-Directives:
+**Purpose**: Compile code conditionally based on certain conditions.
 
-    #ifdef, #ifndef: Check if a macro is defined or not.
+**Directives**:
 
-    c
-```
+- `#ifdef`, `#ifndef`: Check if a macro is defined or not.Purpose: Compile code conditionally based on certain conditions.&nbsp;
 
-#ifdef DEBUG printf("Debugging is enabled\\n"); #endif
-
-c
-
-#ifndef RELEASE printf("Release mode is not enabled\\n"); #endif
-
-#if, #elif, #else, #endif: Perform conditional compilation based on expressions.
-
-c
-
-```
-    #define VERSION 2
-
-    #if VERSION == 1
-    printf("Version 1\n");
-    #elif VERSION == 2
-    printf("Version 2\n");
-    #else
-    printf("Unknown version\n");
-    #endif
+```c
+#ifdef DEBUG
+printf("Debugging is enabled\n");
+#endif
 ```
 
-1.4 #error and #pragma
-
-```
-#error: Generate a compilation error with a custom message.
-
-c
+```c
+#ifndef RELEASE
+printf("Release mode is not enabled\n");
+#endif
 ```
 
-#ifndef CONFIG #error "CONFIG is not defined" #endif
+- `#if`, `#elif`, `#else`, `#endif`: Perform conditional compilation based on expressions.
 
-#pragma: Provides additional information to the compiler. The usage and effect can be compiler-specific.
+```c
+#define VERSION 2
 
-c
-
-#pragma warning(disable: 4996)  // Disable specific compiler warnings
+#if VERSION == 1
+printf("Version 1\n");
+#elif VERSION == 2
+printf("Version 2\n");
+#else
+printf("Unknown version\n");
+#endif
+```
 
 &nbsp;
+
+#### 1.4 `#error and #pragma`
+
+- `#error`: Generate a compilation error with a custom message.
+
+```c
+#ifndef CONFIG
+#error "CONFIG is not defined"
+#endif
+```
+
+- `#pragma`: Provides additional information to the compiler. The usage and effect can be compiler-specific.
+
+```c
+#pragma warning(disable: 4996)  // Disable specific compiler warnings
+```
+
+&nbsp;
+
+### Use One File in Another
+
+To use functions, variables, or data types defined in one file in another file, you typically use header files.
+
+&nbsp;
+
+#### Create a Header File
+
+- **Header File (**`myheader.h`): Contains function prototypes, macro definitions, and data type declarations.
+
+```c
+// myheader.h
+
+#ifndef MYHEADER_H
+#define MYHEADER_H
+
+// Function prototype
+void sayHello();
+
+// Macro definition
+#define GREETING "Hello, World!"
+
+#endif  // MYHEADER_H
+```
+
+- **Include Guards (**`#ifndef`, `#define`, `#endif`): Prevent multiple inclusions of the same header file.
+
+&nbsp;
+
+#### Implement the Functions in a Source File
+
+- **Source File (**`myheader.c`): Contains the implementations of functions declared in the header file.
+
+```c
+// myheader.c
+
+#include <stdio.h>
+#include "myheader.h"
+
+void sayHello() {
+    printf("%s\n", GREETING);
+}
+```
+
+&nbsp;
+
+#### Use the Header in Another Source File
+
+- **Main Source File (**`main.c`): Uses the header file to access functions and macros.
+
+```c
+// main.c
+
+#include <stdio.h>
+#include "myheader.h"
+
+int main() {
+    sayHello();  // Call the function from myheader.c
+    return 0;
+}
+```
+
+&nbsp;
+
+#### Stringification and Token Pasting
+
+- **Stringification (**`#`): Converts a macro argument into a string.
+
+```c
+#define STR(x) #x
+printf("%s\n", STR(Hello));  // Output: "Hello"
+```
+
+- **Token Pasting (**`##`): Concatenates two tokens.
+
+```c
+#define CONCAT(a, b) a##b
+int CONCAT(var, 1) = 10;  // int var1 = 10;
+```
+
+&nbsp;
+
+Understanding preprocessor directives is crucial for effective C programming, enabling code modularity, conditional compilation, and more. By organizing code using header files and directives, you can write maintainable and efficient programs.
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBZGV2LWRvY3MtY29sbGVjdGlvbiUzQSUzQWFycGl0cGFyZWto" repo-name="dev-docs-collection"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
