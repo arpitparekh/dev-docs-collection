@@ -1736,7 +1736,7 @@ Preprocessor directives in C are commands that are executed by the preprocessor 
 
 **Directives**:
 
-- `#ifdef`, `#ifndef`: Check if a macro is defined or not.Purpose: Compile code conditionally based on certain conditions.&nbsp;
+- `#ifdef`, `#ifndef`: Check if a macro is defined or not and it compiles code conditionally based on certain conditions.&nbsp;
 
 ```c
 #ifdef DEBUG
