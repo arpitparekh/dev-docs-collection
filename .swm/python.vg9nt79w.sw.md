@@ -1,11 +1,11 @@
 ---
 title: Python
 ---
-Python is a high-level, interpreted programming language created by Guido van Rossum and first released in 1991. It's known for its clear syntax, readability, and versatility. Key characteristics include:
+Python is a high-level, interpreted programming language created by Guido van Rossum and first released in 1991. It's known for its clear syntax, readability, and versatility
 
 1. **Interpreted**: Python code is executed line by line, rather than compiled ahead of time.
 
-2. **Dynamic** typing: Variable types are determined at runtime.
+2. **Dynamic** **typing**: Variable types are determined at runtime.
 
 3. **Object-oriented**: Supports object-oriented programming paradigms.
 
@@ -238,7 +238,7 @@ Python is widely used across various domains due to its versatility and extensiv
 
 - `JupyterLab`: Interactive development environment
 
-- `Anaconda`: Distribution of Python for scientific computing
+- `Anaconda`: Distribution o \`f Python for scientific computing
 
 - `Coursera`, `edX`: Online learning platforms with Python courses
 
